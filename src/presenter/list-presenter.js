@@ -3,24 +3,25 @@ import EditPointView from '../view/edit-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointView from '../view/point-view.js';
 import { RenderPosition, render } from '../render.js';
-
-const POINTS_AMOUNT = 3;
+import { getRandomArrayElement } from '../utils.js';
 
 export default class ListPresenter {
   listComponent = new PointListView();
 
-  constructor({ listContainer }) {
+  constructor({ listContainer, pointsModel }) {
     this.listContainer = listContainer;
+    this.pointsModel = pointsModel;
   }
 
   init() {
+    this.listPoints = [...this.pointsModel.getPoints()];
+
     render(this.listComponent, this.listContainer);
     render(new AddNewPointView(), this.listComponent.getElement());
-    render(new EditPointView(), this.listComponent.getElement(), RenderPosition.AFTERBEGIN);
+    render(new EditPointView(getRandomArrayElement(this.listPoints)), this.listComponent.getElement(), RenderPosition.AFTERBEGIN);
 
-    for (let i = 0; i < POINTS_AMOUNT; i++) {
-      render(new PointView(), this.listComponent.getElement());
+    for (let i = 0; i < this.listPoints.length; i++) {
+      render(new PointView({ point: this.listPoints[i] }), this.listComponent.getElement());
     }
   }
 }
-
