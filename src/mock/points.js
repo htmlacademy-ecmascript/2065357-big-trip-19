@@ -116,7 +116,7 @@ const mockPoints = [
     dateTo: '2019-03-18T13:35',
     destination: [2],
     id: '1',
-    isFavorite: false,
+    isFavorite: true,
     offers: [1, 2],
     type: 'flight'
   },
@@ -146,7 +146,7 @@ const mockPoints = [
     dateTo: '2019-03-19T13:00',
     destination: [1],
     id: '4',
-    isFavorite: false,
+    isFavorite: true,
     offers: [1],
     type: 'check-in'
   }

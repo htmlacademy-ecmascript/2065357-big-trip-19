@@ -9,7 +9,7 @@ const MILLISECONDS_AMOUNT_IN_DAY = 86400000;
 dayjs.extend(Duration);
 
 function createPointTemplate(point) {
-  const { type, dateFrom, dateTo, basePrice, destination, offers } = point;
+  const { type, dateFrom, dateTo, basePrice, destination, offers, isFavorite } = point;
 
   const pointTypeOffer = offersByType.find((offer) => offer.type === type);
   const pointDestination = destinations.find((appointment) => destination.includes(appointment.id));
@@ -29,11 +29,11 @@ function createPointTemplate(point) {
     const eventDuration = to.diff(from);
     let durationFormat = 'DD[D] HH[H] mm[M]';
 
-    if (eventDuration < MILLISECONDS_AMOUNT_IN_HOUR) {
-      durationFormat = 'mm[M]';
-    }
     if (eventDuration < MILLISECONDS_AMOUNT_IN_DAY) {
       durationFormat = 'HH[H] mm[M]';
+    }
+    if (eventDuration < MILLISECONDS_AMOUNT_IN_HOUR) {
+      durationFormat = 'mm[M]';
     }
 
     return dayjs.duration(eventDuration).format(durationFormat);
@@ -61,7 +61,7 @@ function createPointTemplate(point) {
     <ul class="event__selected-offers">
     ${offersTemplate}
     </ul>
-    <button class="event__favorite-btn event__favorite-btn--active" type="button">
+    <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
         <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
