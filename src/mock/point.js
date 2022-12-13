@@ -37,7 +37,7 @@ const createPoint = (count) => {
     dateTo: randomDates.dateTo,
     destination: getRandomArrayElement(destinations).id,
     id: count,
-    isFavorite: false,
+    isFavorite: Boolean(getRandomInteger(0, 1)),
     offers: getRandomIdsArray(),
     type: getRandomArrayElement(POINT_TYPES)
   };
