@@ -5,6 +5,8 @@ import { render } from './render.js';
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 
+import './mock/point.js';
+
 const tripMain = document.querySelector('.trip-main');
 const tripFilterContainer = tripMain.querySelector('.trip-controls__filters');
 const siteMain = document.querySelector('.page-main');

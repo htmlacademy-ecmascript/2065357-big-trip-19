@@ -1,4 +1,4 @@
-import { destinations, offersByType } from '../mock/points.js';
+import { destinations, offersByType } from '../mock/point.js';
 import { createElement } from '../render.js';
 import dayjs from 'dayjs';
 
@@ -6,10 +6,12 @@ function createEditPointTemplate(point) {
   const { type, dateFrom, dateTo, basePrice, destination, offers } = point;
 
   const pointTypeOffer = offersByType.find((offer) => offer.type === type);
-  const pointDestination = destinations.find((appointment) => destination.includes(appointment.id));
+  const pointDestination = destinations.find((appointment) => destination === appointment.id);
 
-  const offersTemplate = pointTypeOffer.offers
-    .map((offer) => `
+  let offersTemplate = '';
+  if (pointTypeOffer) {
+    offersTemplate = pointTypeOffer.offers
+      .map((offer) => `
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-1" type="checkbox" name=${offer.title} ${offers.includes(offer.id) ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-${offer.title}-1">
@@ -18,6 +20,7 @@ function createEditPointTemplate(point) {
         <span class="event__offer-price">${offer.price}</span>
       </label>
     </div>`).join('');
+  }
 
   const parsDateTo = dayjs(dateTo);
   const parsDateFrom = dayjs(dateFrom);
