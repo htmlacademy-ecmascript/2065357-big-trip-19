@@ -143,7 +143,7 @@ export default class EditPointView {
   #element = null;
   #point = null;
 
-  constructor(point) {
+  constructor({ point }) {
     this.#point = point;
   }
 
