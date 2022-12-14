@@ -1,5 +1,6 @@
 import EditPointView from '../view/edit-point-view.js';
 import PointListView from '../view/point-list-view.js';
+import PointListMessageView from '../view/point-list-empty-message-view.js';
 import PointView from '../view/point-view.js';
 import { render } from '../render.js';
 import { isEscapeKey } from '../utils.js';
@@ -23,8 +24,12 @@ export default class ListPresenter {
 
     render(this.#listComponent, this.#listContainer);
 
-    for (let i = 0; i < this.#listPoints.length; i++) {
-      this.#renderPoint(this.#listPoints[i]);
+    if (this.#listPoints.length > 0) {
+      for (let i = 0; i < this.#listPoints.length; i++) {
+        this.#renderPoint(this.#listPoints[i]);
+      }
+    } else {
+      render(new PointListMessageView(), this.#listComponent.element);
     }
   }
 
