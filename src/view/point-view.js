@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
 import Duration from 'dayjs/plugin/duration';
-import { destinations, offersByType } from '../mock/points.js';
+import { destinations, offersByType } from '../mock/point.js';
 import { createElement } from '../render.js';
 
+const DATE_FORMAT = 'DD MMM';
+const TIME_FORMAT = 'HH:mm';
 const MILLISECONDS_AMOUNT_IN_HOUR = 3600000;
 const MILLISECONDS_AMOUNT_IN_DAY = 86400000;
 
@@ -12,15 +14,18 @@ function createPointTemplate(point) {
   const { type, dateFrom, dateTo, basePrice, destination, offers, isFavorite } = point;
 
   const pointTypeOffer = offersByType.find((offer) => offer.type === type);
-  const pointDestination = destinations.find((appointment) => destination.includes(appointment.id));
+  const pointDestination = destinations.find((appointment) => destination === appointment.id);
 
-  const offersTemplate = pointTypeOffer.offers
-    .filter((offer) => offers.includes(offer.id))
-    .map((offer) => `<li class="event__offer">
+  let offersTemplate = '';
+  if (pointTypeOffer) {
+    offersTemplate = pointTypeOffer.offers
+      .filter((offer) => offers.includes(offer.id))
+      .map((offer) => `<li class="event__offer">
                       <span class="event__offer-title">${offer.title}</span>
                       &plus;&euro;&nbsp;
                       <span class="event__offer-price">${offer.price}</span>
                     </li>`).join('');
+  }
 
   const parsDateTo = dayjs(dateTo);
   const parsDateFrom = dayjs(dateFrom);
@@ -41,16 +46,16 @@ function createPointTemplate(point) {
 
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="${dateFrom}">${parsDateFrom.format('DD MMM')}</time>
+    <time class="event__date" datetime="${dateFrom}">${parsDateFrom.format(DATE_FORMAT)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type} ${pointDestination.name}</h3>
+    <h3 class="event__title">${type} ${pointDestination ? pointDestination.name : ''}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${dateFrom}">${parsDateFrom.format('HH:mm')}</time>
+        <time class="event__start-time" datetime="${dateFrom}">${parsDateFrom.format(TIME_FORMAT)}</time>
         &mdash;
-        <time class="event__end-time" datetime="${dateTo}">${parsDateTo.format('HH:mm')}</time>
+        <time class="event__end-time" datetime="${dateTo}">${parsDateTo.format(TIME_FORMAT)}</time>
       </p>
       <p class="event__duration">${getEventDuration(parsDateFrom, parsDateTo)}</p >
     </div >
@@ -78,7 +83,7 @@ export default class PointView {
   #element = null;
   #point = null;
 
-  constructor(point) {
+  constructor({ point }) {
     this.#point = point;
   }
 
