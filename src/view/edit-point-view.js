@@ -1,6 +1,6 @@
 import { destinations, offersByType } from '../mock/point.js';
-import { createElement } from '../render.js';
 import dayjs from 'dayjs';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createEditPointTemplate(point) {
   const { type, dateFrom, dateTo, basePrice, destination, offers } = point;
@@ -139,11 +139,12 @@ function createEditPointTemplate(point) {
             </li>`;
 }
 
-export default class EditPointView {
-  #element = null;
+export default class EditPointView extends AbstractView {
   #point = null;
 
   constructor({ point }) {
+    super();
+
     this.#point = point;
   }
 
@@ -151,15 +152,4 @@ export default class EditPointView {
     return createEditPointTemplate(this.#point);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Duration from 'dayjs/plugin/duration';
 import { destinations, offersByType } from '../mock/point.js';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const DATE_FORMAT = 'DD MMM';
 const TIME_FORMAT = 'HH:mm';
@@ -79,11 +79,12 @@ function createPointTemplate(point) {
 </li>`;
 }
 
-export default class PointView {
-  #element = null;
+export default class PointView extends AbstractView {
   #point = null;
 
   constructor({ point }) {
+    super();
+
     this.#point = point;
   }
 
@@ -91,15 +92,4 @@ export default class PointView {
     return createPointTemplate(this.#point);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
 }
