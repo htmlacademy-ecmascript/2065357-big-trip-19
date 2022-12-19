@@ -34,39 +34,40 @@ export default class ListPresenter {
   }
 
   #renderPoint(point) {
-    const pointComponent = new PointView({ point });
-    const pointEditComponent = new EditPointView({ point });
-
-    const pointRollupButton = pointComponent.element.querySelector('.event__rollup-btn');
-    const editPointForm = pointEditComponent.element.querySelector('form');
-    const editRollupButton = editPointForm.querySelector('.event__rollup-btn');
-
     const escapeKeydownHandler = (evt) => {
       if (isEscapeKey) {
-        closeEditPointFormHandler(evt);
+        evt.preventDefault();
+        replaceFormToPoint.call(this);
+        document.removeEventListener('keydown', escapeKeydownHandler);
       }
     };
 
-    const replaceFormToPoint = () => {
+    const pointComponent = new PointView({
+      point,
+      onRollupButtonClick: () => {
+        replacePointToForm.call(this);
+        document.addEventListener('keydown', escapeKeydownHandler);
+      }
+    });
+
+    const pointEditComponent = new EditPointView({
+      point,
+      onFormSubmit: () => {
+        replaceFormToPoint.call(this);
+        document.removeEventListener('keydown', escapeKeydownHandler);
+      },
+      onRollupButtonClick: () => {
+        replaceFormToPoint.call(this);
+        document.removeEventListener('keydown', escapeKeydownHandler);
+      }
+    });
+
+    function replaceFormToPoint() {
       this.#listComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
-      editRollupButton.removeEventListener('click', replaceFormToPoint);
-      document.removeEventListener('keydown', escapeKeydownHandler);
-      editPointForm.removeEventListener('submit', closeEditPointFormHandler);
+    }
 
-    };
-
-    const replacePointToForm = () => {
+    function replacePointToForm() {
       this.#listComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
-      editRollupButton.addEventListener('click', replaceFormToPoint);
-      document.addEventListener('keydown', escapeKeydownHandler);
-      editPointForm.addEventListener('submit', closeEditPointFormHandler);
-    };
-
-    pointRollupButton.addEventListener('click', replacePointToForm);
-
-    function closeEditPointFormHandler(evt) {
-      evt.preventDefault();
-      replaceFormToPoint();
     }
 
     render(pointComponent, this.#listComponent.element);
