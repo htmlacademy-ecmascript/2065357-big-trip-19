@@ -2,6 +2,8 @@ import { destinations, offersByType } from '../mock/point.js';
 import dayjs from 'dayjs';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../mock/const.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createEditPointTemplate(point) {
   const { type, dateFrom, dateTo, basePrice, destination, offers } = point;
@@ -117,6 +119,8 @@ function createEditPointTemplate(point) {
 export default class EditPointView extends AbstractStatefulView {
   #handleFormSubmit = null;
   #handleRollupButtonClick = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
   constructor({ point, onFormSubmit, onRollupButtonClick }) {
     super();
@@ -130,6 +134,20 @@ export default class EditPointView extends AbstractStatefulView {
 
   get template() {
     return createEditPointTemplate(this._state);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
   }
 
   static parsePointToState = (point) => ({ ...point });
@@ -153,6 +171,9 @@ export default class EditPointView extends AbstractStatefulView {
       .addEventListener('input', this.#priceInputHandler);
     this.element.querySelectorAll('.event__offer-selector input')
       .forEach((offer) => offer.addEventListener('change', this.#offersChangeHandler));
+
+    this.#setDatePickerFrom();
+    this.#setDatePickerTo();
   }
 
   #eventTypeToggleHandler = (evt) => {
@@ -199,6 +220,18 @@ export default class EditPointView extends AbstractStatefulView {
     });
   };
 
+  #dateFromChangeHadler = ([dateFrom]) => {
+    this.updateElement({
+      dateFrom: dateFrom
+    });
+  };
+
+  #dateToChangeHadler = ([dateTo]) => {
+    this.updateElement({
+      dateTo: dateTo
+    });
+  };
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#handleFormSubmit(EditPointView.parseStateToPoint(this._state));
@@ -208,4 +241,28 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     this.#handleRollupButtonClick();
   };
+
+  #setDatePickerFrom() {
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('input[name=event-start-time]'),
+      {
+        dateFormat: 'j/m/y H:i',
+        defaultDate: this._state.dateFrom,
+        onChange: this.#dateFromChangeHadler,
+        enableTime: true
+      }
+    );
+  }
+
+  #setDatePickerTo() {
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('input[name=event-end-time]'),
+      {
+        dateFormat: 'j/m/y H:i',
+        defaultDate: this._state.dateTo,
+        onChange: this.#dateToChangeHadler,
+        enableTime: true
+      }
+    );
+  }
 }
