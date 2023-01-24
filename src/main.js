@@ -38,7 +38,9 @@ const filterPresenter = new FilterPresenter({
 
 const tripInfoPresenter = new TripInfoPresenter({
   tripInfoContainer: tripMain,
-  pointsModel
+  pointsModel,
+  offersByTypeModel,
+  destinationsModel
 });
 
 function handleNewPointButtonClick() {
