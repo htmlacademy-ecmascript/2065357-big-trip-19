@@ -145,7 +145,7 @@ export default class ListPresenter {
     this.#pointPresenter.clear();
 
     remove(this.#sortComponent);
-
+    remove(this.#listMessageComponent);
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
