@@ -9,6 +9,7 @@ import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../view/loading-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import ErrorView from '../view/error-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -22,6 +23,7 @@ export default class ListPresenter {
 
   #listComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #errorComponent = new ErrorView();
   #sortComponent = null;
   #listMessageComponent = null;
 
@@ -175,6 +177,10 @@ export default class ListPresenter {
     render(this.#loadingComponent, this.#listComponent.element);
   }
 
+  #renderErrorMessage() {
+    render(this.#errorComponent, this.#listComponent.element);
+  }
+
   #clearBoard({ resetSortType = false } = {}) {
     this.#newPointPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
@@ -197,9 +203,14 @@ export default class ListPresenter {
       return;
     }
 
-    this.#renderSort();
-
     const points = this.points;
+
+    if (!points.length && !this.#pointsModel.offers.length && !this.#pointsModel.destinations.length) {
+      this.#renderErrorMessage();
+      return;
+    }
+
+    this.#renderSort();
 
     if (points.length) {
       remove(this.#listMessageComponent);
