@@ -50,9 +50,14 @@ function handleNewPointButtonClose() {
   newPointButtonComponent.element.disabled = false;
 }
 
+render(newPointButtonComponent, tripMain);
+newPointButtonComponent.element.disabled = true;
+
 pointsModel.init()
   .finally(() => {
-    render(newPointButtonComponent, tripMain);
+    if (pointsModel.points.length) {
+      newPointButtonComponent.element.disabled = false;
+    }
   });
 tripInfoPresenter.init();
 filterPresenter.init();

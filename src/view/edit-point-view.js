@@ -300,12 +300,10 @@ export default class EditPointView extends AbstractStatefulView {
       {
         dateFormat: 'j/m/y H:i',
         defaultDate: this._state.dateFrom,
-        minDate: 'today',
         maxDate: this._state.dateTo,
         onChange: this.#dateFromChangeHandler,
         enableTime: true,
-        // eslint-disable-next-line camelcase
-        time_24hr: true
+        'time_24hr': true
       }
     );
   }
@@ -319,8 +317,7 @@ export default class EditPointView extends AbstractStatefulView {
         minDate: this._state.dateFrom,
         onChange: this.#dateToChangeHandler,
         enableTime: true,
-        // eslint-disable-next-line camelcase
-        time_24hr: true
+        'time_24hr': true
       }
     );
   }
