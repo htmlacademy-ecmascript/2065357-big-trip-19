@@ -5,16 +5,18 @@ import { render } from './framework/render.js';
 import AddNewPointButtonView from './view/add-new-point-button-view.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import OffersByTypeModel from './model/offers-by-type-model.js';
-import DestinationsModel from './model/destinations-model.js';
+import PointsApiService from './points-api-service.js';
+
+const AUTHORIZATION = 'Basic fG3425Efdsk355';
+const END_POINT = 'https://19.ecmascript.pages.academy/big-trip';
 
 const tripMain = document.querySelector('.trip-main');
 const tripFilterContainer = tripMain.querySelector('.trip-controls__filters');
 const siteMain = document.querySelector('.page-main');
 const tripEventsContainer = siteMain.querySelector('.trip-events');
-const pointsModel = new PointsModel();
-const offersByTypeModel = new OffersByTypeModel();
-const destinationsModel = new DestinationsModel();
+const pointsModel = new PointsModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
 const filterModel = new FilterModel();
 
 const newPointButtonComponent = new AddNewPointButtonView({
@@ -24,8 +26,6 @@ const newPointButtonComponent = new AddNewPointButtonView({
 const listPresenter = new ListPresenter({
   listContainer: tripEventsContainer,
   pointsModel,
-  offersByTypeModel,
-  destinationsModel,
   filterModel,
   onNewPointDestroy: handleNewPointButtonClose
 });
@@ -38,9 +38,7 @@ const filterPresenter = new FilterPresenter({
 
 const tripInfoPresenter = new TripInfoPresenter({
   tripInfoContainer: tripMain,
-  pointsModel,
-  offersByTypeModel,
-  destinationsModel
+  pointsModel
 });
 
 function handleNewPointButtonClick() {
@@ -52,8 +50,10 @@ function handleNewPointButtonClose() {
   newPointButtonComponent.element.disabled = false;
 }
 
-render(newPointButtonComponent, tripMain);
-
+pointsModel.init()
+  .finally(() => {
+    render(newPointButtonComponent, tripMain);
+  });
 tripInfoPresenter.init();
 filterPresenter.init();
 listPresenter.init();
