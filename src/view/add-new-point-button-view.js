@@ -5,21 +5,21 @@ function createTripInfoTemplate() {
 }
 
 export default class AddNewPointButtonView extends AbstractView {
-  #handleClick = null;
+  #handleNewPointButtonClick = null;
 
-  constructor({ onClick }) {
+  constructor({ onNewPointButtonClick }) {
     super();
-    this.#handleClick = onClick;
-    this.element.addEventListener('click', this.#clickHandler);
+    this.#handleNewPointButtonClick = onNewPointButtonClick;
+    this.element.addEventListener('click', this.#newPointButtonClickHandler);
   }
 
   get template() {
     return createTripInfoTemplate();
   }
 
-  #clickHandler = (evt) => {
+  #newPointButtonClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleClick();
+    this.#handleNewPointButtonClick();
   };
 
 }

@@ -20,7 +20,7 @@ const pointsModel = new PointsModel({
 const filterModel = new FilterModel();
 
 const newPointButtonComponent = new AddNewPointButtonView({
-  onClick: handleNewPointButtonClick
+  onNewPointButtonClick: handleNewPointButtonClick
 });
 
 const listPresenter = new ListPresenter({
