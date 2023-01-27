@@ -20,7 +20,7 @@ const BLANK_POINT = {
   type: DefaultPointData.TYPE
 };
 
-function createEditPointTemplate(point, offersByType, destinations) {
+const createEditPointTemplate = (point, offersByType, destinations) => {
   const { type, dateFrom, dateTo, basePrice, destination, offers, isDisabled, isSaving, isDeleting } = point;
 
   const isNewPoint = !point.id;
@@ -138,7 +138,7 @@ function createEditPointTemplate(point, offersByType, destinations) {
                 </section>
               </form>
             </li>`;
-}
+};
 
 export default class EditPointView extends AbstractStatefulView {
   #offersBytype = null;

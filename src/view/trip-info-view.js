@@ -5,7 +5,7 @@ const DATE_FORMAT = 'MMM DD';
 const MULTIPLE_SYMBOL = '...';
 const MAX_CITIES_VISIBLE_COUNT = 3;
 
-function createTripInfoTemplate(points, offersByType, destinations) {
+const createTripInfoTemplate = (points, offersByType, destinations) => {
 
   const createTripRouteTemplate = () => {
     const routeCities = [];
@@ -85,7 +85,7 @@ function createTripInfoTemplate(points, offersByType, destinations) {
             </div>
             ${createTripTotalPriceTemplate()}
           </section>`;
-}
+};
 
 export default class TripInfoView extends AbstractView {
   #points = null;
