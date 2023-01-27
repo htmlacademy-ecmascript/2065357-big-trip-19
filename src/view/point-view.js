@@ -9,7 +9,7 @@ const TIME_FORMAT = 'HH:mm';
 const MILLISECONDS_AMOUNT_IN_HOUR = 3600000;
 const MILLISECONDS_AMOUNT_IN_DAY = 86400000;
 
-function createPointTemplate(point, offersByType, destinations) {
+const createPointTemplate = (point, offersByType, destinations) => {
   const { type, dateFrom, dateTo, basePrice, destination, offers, isFavorite } = point;
 
   const parsDateTo = dayjs(dateTo);
@@ -79,7 +79,7 @@ function createPointTemplate(point, offersByType, destinations) {
     </button>
   </div >
 </li>`;
-}
+};
 
 export default class PointView extends AbstractView {
   #point = null;
