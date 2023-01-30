@@ -1,13 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import he from 'he';
 
 const createFilterTemplate = (filters, currentFilterType) => {
 
   const renderFilter = () => filters.map((filter) =>
     `<div class="trip-filters__filter">
-        <input id="filter-${filter.name}" class="trip-filters__filter-input  
-              visually-hidden" type="radio" name="trip-filter" value="${filter.name}"
+        <input id="filter-${he.encode(filter.name)}" class="trip-filters__filter-input  
+              visually-hidden" type="radio" name="trip-filter" value="${he.encode(filter.name)}"
               ${filter.count === 0 ? 'disabled' : ''} ${filter.name === currentFilterType ? 'checked' : ''}>
-        <label class="trip-filters__filter-label" for="filter-${filter.name}" ${filter.count === 0 ? 'disabled' : ''}>${filter.name}</label>
+        <label class="trip-filters__filter-label" for="filter-${filter.name}" ${filter.count === 0 ? 'disabled' : ''}>${he.encode(filter.name)}</label>
     </div>`).join('');
 
   return `<form class="trip-filters" action="#" method="get">
