@@ -43,11 +43,13 @@ const tripInfoPresenter = new TripInfoPresenter({
 
 function handleNewPointButtonClick() {
   listPresenter.createPoint();
+  listPresenter.hideListMessage();
   newPointButtonComponent.element.disabled = true;
 }
 
 function handleNewPointButtonClose() {
   newPointButtonComponent.element.disabled = false;
+  listPresenter.showListMessage();
 }
 
 render(newPointButtonComponent, tripMain);
@@ -55,8 +57,10 @@ newPointButtonComponent.element.disabled = true;
 
 pointsModel.init()
   .finally(() => {
-    if (pointsModel.points.length) {
-      newPointButtonComponent.element.disabled = false;
+    newPointButtonComponent.element.disabled = false;
+
+    if (!pointsModel.offers.length && !pointsModel.destinations.length) {
+      newPointButtonComponent.element.disabled = true;
     }
   });
 tripInfoPresenter.init();

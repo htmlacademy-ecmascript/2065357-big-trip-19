@@ -3,6 +3,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { ucFirst, validatePriceField } from '../utils/common.js';
+import he from 'he';
 
 const DefaultPointData = {
   DATE_FROM: dayjs().toISOString(),
@@ -35,12 +36,12 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
   const pointTypeOffer = offersByType.find((offer) => offer.type === type);
   const pointDestination = destinations.find((appointment) => destination === appointment.id);
 
-  const destinationOptionsTemplate = destinations.map((element) => `<option value="${element.name}"></option>`).join('');
+  const destinationOptionsTemplate = destinations.map((element) => `<option value="${he.encode(element.name)}"></option>`).join('');
 
   const typeOptionsTemplate = offersByType.map((offer) => `
     <div class="event__type-item">
-      <input id="event-type-${offer.type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${offer.type}" ${offer.type === type ? 'checked' : ''}>
-      <label class="event__type-label  event__type-label--${offer.type}" for="event-type-${offer.type}-1">${ucFirst(offer.type)}</label>
+      <input id="event-type-${he.encode(offer.type)}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${he.encode(offer.type)}" ${offer.type === type ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${he.encode(offer.type)}" for="event-type-${he.encode(offer.type)}-1">${ucFirst(he.encode(offer.type))}</label>
     </div>`).join('');
 
   const createOffersTemplate = () => {
@@ -54,11 +55,11 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
       <div class="event__available-offers">
       ${pointTypeOffer.offers.map((offer) => `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${offer.id}" type="checkbox" name="${offer.title}" data-offer-id="${offer.id}" ${offers.includes(offer.id) ? 'checked' : ''}>
-            <label class="event__offer-label" for="event-offer-${offer.title}-${offer.id}">
-              <span class="event__offer-title">${offer.title}</span>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${he.encode(offer.title)}-${he.encode(String(offer.id))}" type="checkbox" name="${he.encode(offer.title)}" data-offer-id="${he.encode(String(offer.id))}" ${offers.includes(offer.id) ? 'checked' : ''}>
+            <label class="event__offer-label" for="event-offer-${he.encode(offer.title)}-${he.encode(String(offer.id))}">
+              <span class="event__offer-title">${he.encode(offer.title)}</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${offer.price}</span>
+              <span class="event__offer-price">${he.encode(String(offer.price))}</span>
             </label>
           </div>`).join('')}
       </div>
@@ -73,10 +74,10 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
     return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${pointDestination.description}</p>
+      <p class="event__destination-description">${he.encode(pointDestination.description)}</p>
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}"></img>`).join('')}
+          ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${he.encode(picture.src)}" alt="${he.encode(picture.description)}"></img>`).join('')}
         </div>
       </div>
     </section>`;
@@ -90,7 +91,7 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${he.encode(type)}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -104,9 +105,9 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
 
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
-                      ${type}
+                      ${he.encode(type)}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''}" list="destination-list-1" required>
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination ? he.encode(pointDestination.name) : ''}" list="destination-list-1" required>
                     <datalist id="destination-list-1">
                       ${destinationOptionsTemplate}
                     </datalist>
@@ -125,7 +126,7 @@ const createEditPointTemplate = (point, offersByType, destinations) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${point.basePrice ? basePrice : 0} required>
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${point.basePrice ? he.encode(String(basePrice)) : 0} required>
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit" ${isSubmitDisabled || isDisabled ? '' : 'disabled'}>${submitBtnText}</button>
