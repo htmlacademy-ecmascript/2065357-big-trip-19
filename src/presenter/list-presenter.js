@@ -77,6 +77,14 @@ export default class ListPresenter {
     this.#newPointPresenter.init();
   }
 
+  hideListMessage() {
+    remove(this.#listMessageComponent);
+  }
+
+  showListMessage() {
+    this.#renderListMessage();
+  }
+
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       offers: this.#pointsModel.offers,
@@ -141,10 +149,10 @@ export default class ListPresenter {
       return;
     }
 
-    this.#renderSort();
-
     if (points.length) {
       remove(this.#listMessageComponent);
+      this.#renderSort();
+
       for (const point of points) {
         this.#renderPoint(point);
       }
