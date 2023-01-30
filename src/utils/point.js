@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/IsSameOrAfter';
-import isSameOrBefore from 'dayjs/plugin/IsSameOrBefore';
+import IsSameOrAfter from 'dayjs/plugin/IsSameOrAfter';
+import IsSameOrBefore from 'dayjs/plugin/IsSameOrBefore';
 
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
+dayjs.extend(IsSameOrAfter);
+dayjs.extend(IsSameOrBefore);
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
